@@ -2,6 +2,6 @@
 Various tests with dslabs
 
 
-<u>Examples used:</u> 
+Examples used:
 Large data and dimensionality reduction:
 https://rafalab.github.io/dsbook/large-datasets.html#distance

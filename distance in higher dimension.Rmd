@@ -1,0 +1,113 @@
+---
+title: "Large datasets"
+author: "Matt Chennowitz"
+date: '2022-06-24'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(dslabs)
+```
+
+## Using Rafalab dataset: 
+<https://rafalab.github.io/dsbook/large-datasets.html#distance>
+
+```{r}
+
+if(!exists("mnist")) mnist <- read_mnist()
+
+set.seed(1995)
+ind <- which(mnist$train$labels %in% c(2,7)) %>% sample(500)
+x <- mnist$train$images[ind,]
+y <- mnist$train$labels[ind]
+```
+
+The predictors are in X and the labels in y
+
+
+```{r cars}
+# Labels for first 3 obs
+y[1:3]
+
+#The vectors of predictors for each of these observations are:
+x_1 <- x[1,]
+x_2 <- x[2,]
+x_3 <- x[3,]
+
+#Get distances between the two numbers:
+sqrt(sum((x_1 - x_2)^2))
+sqrt(crossprod(x_1 - x_2))
+sqrt(crossprod(x_1 - x_3))
+
+d <- dist(x) # dist function computes all the distances between each row
+class(d)
+as.matrix(d)[1:3,1:3]
+
+image(as.matrix(d)[order(y), order(y)])
+dim(as.matrix(d))
+```
+
+Now instead of euclidean distances between OBSERVATIONS (i.e. between rows), x1,j - x2,j, now we get distance between predictors, xi,1 - xi,2
+
+```{r}
+#Transpose matrix first then use dist
+d <- dist(t(x))
+dim(as.matrix(d))
+as.matrix(d)[1:3,1:3]
+
+```
+
+Ex. 34.4
+
+```{r}
+data("tissue_gene_expression")
+dim(tissue_gene_expression$x) #x is a matrix in dataset
+# ... with the gene expression measured on 500 genes for 189 biological samples representing seven different tissues. 
+
+#The tissue type is stored in y
+table(tissue_gene_expression$y)
+
+# 1. Compute the distance between each observation and store it in an object d.
+
+d <- dist(tissue_gene_expression$x)
+
+# 2. Compare the distance between the first two observations (both cerebellums), the 39th and 40th (both colons), and the 73rd and 74th (both endometriums). See if the observations of the same tissue type are closer to each other.
+
+as.matrix(d)[1:2, 1:2] # both cerebellums
+as.matrix(d)[38:41, 38:41] # both colons
+as.matrix(d)[72:75, 72:75] # both endometriums
+
+image(as.matrix(d))
+
+```
+
+## 35 DIMENSION REDUCTION
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
